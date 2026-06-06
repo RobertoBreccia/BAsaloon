@@ -1,0 +1,16 @@
+{
+  "name": "B&A Parrucchieri Gestione",
+  "short_name": "B&A Appuntamenti",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "2048x2048",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
