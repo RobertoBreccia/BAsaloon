@@ -429,7 +429,17 @@
       const time = document.getElementById('f-time').value;
       const service = document.getElementById('f-service').value.trim();
       const notes = document.getElementById('f-notes').value.trim();
-      if (!name || !service) { alert('Inserisci nome e servizio'); return; }
+      // Controllo specifico per il nome del cliente
+      if (!name) { alert('Attenzione: Inserisci il nome del cliente per poter procedere.'); 
+        return; 
+      }
+      // Controllo specifico per il tipo di servizio
+      if (!service) { 
+        alert('Attenzione: Specifica il tipo di servizio o il trattamento da eseguire.'); 
+        return; 
+      }
+
+      // Se entrambi i controlli sono superati, salva l'appuntamento
       saveAppointment({ client_name:name, time, service, notes });
     };
     actions.append(cancelBtn, saveBtn);
