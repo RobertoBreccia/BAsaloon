@@ -88,7 +88,15 @@
     .appointments { list-style:none; padding:1rem; display:flex; flex-direction:column; gap:.6rem; }
     .appt-card { display:flex; align-items:flex-start; gap:1rem; padding:1rem 1.1rem; background:var(--cream); border-radius:var(--radius-sm); border:1px solid var(--ivory); transition:box-shadow .2s; }
     .appt-card:hover { box-shadow:var(--shadow); }
-    .appt-time { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--accent); min-width:44px; padding-top:1px; font-weight:500; }
+    .appt-time { 
+      font-family: 'Syne', sans-serif;       /* Allineato al nuovo font moderno dei titoli */
+      font-size: 1.15rem;                    /* Leggermente più grande per una lettura immediata */
+      font-weight: 700;                      /* Grassetto deciso per farlo risaltare */
+      color: var(--accent-dark);             /* Oro più scuro e saturo, perfetto per la massima leggibilità sullo sfondo chiaro */
+      min-width: 55px;                       /* Spazio orizzontale aumentato per evitare che il testo vada a capo */
+      letter-spacing: -0.02em;               /* Caratteri leggermente più compatti in stile PWA premium */
+      padding-top: 2px;                      
+      }
     .appt-body { flex:1; min-width:0; }
     .appt-name { font-weight:500; font-size:.9rem; color:var(--charcoal); margin-bottom:2px; }
     .appt-name.lash { color:var(--lash-purple); }
