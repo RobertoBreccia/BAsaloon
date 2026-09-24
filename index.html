@@ -190,16 +190,16 @@
     render();
   }
 
-  async function saveAppointment(form) {
-    if (!db) return;
-    if (typeof state.modal === 'object' && state.modal?.id) {
-      await db.from('appointments').update(form).eq('id', state.modal.id);
-    } else {
-      await db.from('appointments').insert([{ ...form, date: toDateStr(state.selectedDate) }]);
-    }
-    state.modal = null;
-    fetchAppointments();
+async function saveAppointment(form) {
+  if (!db) return;
+  if (typeof state.modal === 'object' && state.modal?.id) {
+    await db.from('appointments').update(form).eq('id', state.modal.id);
+  } else {
+    await db.from('appointments').insert([form]);
   }
+  state.modal = null;
+  fetchAppointments();
+}
 
   async function deleteAppointment(id) {
     if (!db) return;
@@ -392,22 +392,32 @@
 
     const form = el('div', {class:'modal-form'});
 
-    // Row: nome + orario
-    const row = el('div', {class:'form-row'});
-    const gName = el('div', {class:'form-group'});
-    gName.appendChild(el('label', {}, 'Cliente'));
-    const iName = el('input', {type:'text', placeholder:'Nome cliente', id:'f-name'});
-    iName.value = appt?.client_name || '';
-    gName.appendChild(iName);
-    row.appendChild(gName);
+// Row: nome
+const rowName = el('div', {class:'form-row'});
+const gName = el('div', {class:'form-group'});
+gName.appendChild(el('label', {}, 'Cliente'));
+const iName = el('input', {type:'text', placeholder:'Nome cliente', id:'f-name'});
+iName.value = appt?.client_name || '';
+gName.appendChild(iName);
+rowName.appendChild(gName);
+form.appendChild(rowName);
 
-    const gTime = el('div', {class:'form-group small'});
-    gTime.appendChild(el('label', {}, 'Orario'));
-    const iTime = el('input', {type:'time', id:'f-time'});
-    iTime.value = appt?.time?.slice(0,5) || '10:00';
-    gTime.appendChild(iTime);
-    row.appendChild(gTime);
-    form.appendChild(row);
+// Row: data + orario
+const row = el('div', {class:'form-row'});
+const gDate = el('div', {class:'form-group small'});
+gDate.appendChild(el('label', {}, 'Data'));
+const iDate = el('input', {type:'date', id:'f-date'});
+iDate.value = appt?.date || toDateStr(state.selectedDate);
+gDate.appendChild(iDate);
+row.appendChild(gDate);
+
+const gTime = el('div', {class:'form-group small'});
+gTime.appendChild(el('label', {}, 'Orario'));
+const iTime = el('input', {type:'time', id:'f-time'});
+iTime.value = appt?.time?.slice(0,5) || '10:00';
+gTime.appendChild(iTime);
+row.appendChild(gTime);
+form.appendChild(row);
 
     // Servizio
     const gSvc = el('div', {class:'form-group'});
@@ -434,9 +444,14 @@
     const saveBtn = el('button', {class:'btn-primary'}, isEdit ? 'Salva modifiche' : 'Aggiungi');
     saveBtn.onclick = () => {
       const name = document.getElementById('f-name').value.trim();
+      const date = document.getElementById('f-date').value;
       const time = document.getElementById('f-time').value;
       const service = document.getElementById('f-service').value.trim();
       const notes = document.getElementById('f-notes').value.trim();
+      // Controllo specifico per la data
+      if (!date) { alert('Attenzione: seleziona una data valida.');
+        return;
+      }
       // Controllo specifico per il nome del cliente
       if (!name) { alert('Attenzione: Inserisci il nome del cliente per poter procedere.'); 
         return; 
@@ -447,8 +462,9 @@
         return; 
       }
 
+
       // Se entrambi i controlli sono superati, salva l'appuntamento
-      saveAppointment({ client_name:name, time, service, notes });
+      saveAppointment({ client_name:name, date, time, service, notes });
     };
     actions.append(cancelBtn, saveBtn);
     form.appendChild(actions);
